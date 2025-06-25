@@ -1,0 +1,51 @@
+// requisitos para iniciar o projeto: importando as libs e arquivos sensiveis
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const mongoose = require('mongoose'); //ODM - Objeto documental modelagem
+
+
+const app = express();
+// Habilitar o parser de JSON em todas as rotas
+app.use(express.json());
+
+// rota de teste
+// rota raiz
+// app.get('/', (req, res) => {
+//     return res.send(`api aircnc rodando...`)
+    
+// });
+
+
+app.get('/ping', (req, res) => {
+    console.log("recebeu ping");
+    res.send("pong");
+
+});
+
+async function startDatabase() {
+    const { DB_USER, DB_PASS, DB_NAME } = process.env
+    const uri = `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.81ivp.mongodb.net/${DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`;
+    
+    try {
+        await mongoose.connect(uri);
+        console.log("conectado ao mongodb atlas");
+
+    } catch (error) {
+        console.error("erro ao conectar ao banco", error.message);
+        process.exit(1); // encerra o processo se a conexao folhar
+    }
+
+
+}
+
+// Acessa a porta e coloca o server no ar
+startDatabase().then( () => {
+    const port = process.env.PORT || 3335
+    app.listen(port, () => {
+        console.log(`servidor rodando na porta ${port}`);
+});
+})
+
+
