@@ -5,17 +5,22 @@ const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose'); //ODM - Objeto documental modelagem
 
+// indicando as rotas para o index da raiz 
+const routes = require("./routes");
+
 
 const app = express();
 // Habilitar o parser de JSON em todas as rotas
 app.use(express.json());
 
-// rota de teste
+
 // rota raiz
-// app.get('/', (req, res) => {
-//     return res.send(`api aircnc rodando...`)
+app.get('/', (req, res) => {
+    return res.send(`api aircnc rodando...`)
     
-// });
+});
+
+app.use(routes); // usa as rotas
 
 
 app.get('/ping', (req, res) => {
